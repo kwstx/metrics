@@ -1,4 +1,4 @@
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Set
 from sqlalchemy.orm import Session
 from models.impact_graph import ImpactNode, ImpactEdge
 from models.impact_projection import ImpactProjection, AgentReliability, DomainMultiplier
@@ -33,7 +33,7 @@ class ImpactForecastEngine:
         multiplier = self._get_domain_multiplier(domain)
 
         # 4. Propagate influence across the Impact Graph
-        impact_vector = self._compute_projected_vector(action_node_id, reliability, multiplier)
+        impact_vector = self._compute_projected_vector([action_node_id], reliability, multiplier)
 
         # 5. Calculate uncertainty and confidence intervals
         base_uncertainty = action_node.uncertainty_metadata or {"std_dev": 0.1, "confidence": 0.9}
@@ -68,32 +68,42 @@ class ImpactForecastEngine:
         record = self.session.query(DomainMultiplier).filter(DomainMultiplier.domain_name == domain_name).first()
         return record.multiplier if record else 1.0
 
-    def _compute_projected_vector(self, node_id: str, reliability: float, multiplier: float) -> Dict[str, float]:
+    def _compute_projected_vector(
+        self,
+        start_node_ids: List[str],
+        reliability: float,
+        multiplier: float,
+        disabled_node_ids: Optional[Set[str]] = None
+    ) -> Dict[str, float]:
         """
         Propagates influence through connected graph nodes using weighted causal traversal.
         Groups impact by outcome_type to form a multi-dimensional vector.
         """
-        G = self.graph_manager._build_nx_graph()
-        if node_id not in G:
+        G = self.graph_manager._build_nx_graph(disabled_node_ids=disabled_node_ids)
+        valid_starts = [sid for sid in start_node_ids if sid in G]
+        if not valid_starts:
             return {}
 
         # Use topological sort if DAG, otherwise BFS with accumulation
         # Causal graphs are generally DAGs.
         is_dag = nx.is_directed_acyclic_graph(G)
         
-        # visited stores the relative influence (magnitude multiplier) at each node
-        influence_map = {node_id: 1.0}
+        # influence_map stores the relative influence at each node
+        influence_map = {sid: 1.0 for sid in valid_starts}
         vector = {}
 
         if is_dag:
-            # Process nodes in topological order starting from node_id
+            # Process nodes in topological order
             nodes_to_process = list(nx.topological_sort(G))
-            # Filter to only include descendants of node_id (and node_id itself)
-            descendants = nx.descendants(G, node_id)
-            descendants.add(node_id)
+            
+            # descendants of ANY of the start nodes
+            all_descendants = set()
+            for sid in valid_starts:
+                all_descendants.update(nx.descendants(G, sid))
+                all_descendants.add(sid)
             
             for n_id in nodes_to_process:
-                if n_id not in descendants:
+                if n_id not in all_descendants:
                     continue
                 
                 inf = influence_map.get(n_id, 0.0)
@@ -115,10 +125,9 @@ class ImpactForecastEngine:
                     added_influence = inf * weight * conf
                     influence_map[neighbor_id] = influence_map.get(neighbor_id, 0.0) + added_influence
         else:
-            # Fallback for graphs with cycles - BFS with limited depth or simple traversal
-            # For causal impact, cycles usually represent feedback loops
-            queue = [node_id]
-            processed = set()
+            # Fallback for graphs with cycles
+            queue = list(valid_starts)
+            processed = set(valid_starts)
             
             while queue:
                 curr_id = queue.pop(0)

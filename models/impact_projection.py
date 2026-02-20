@@ -56,3 +56,73 @@ class DomainMultiplier(Base):
     domain_name = Column(String, primary_key=True)
     multiplier = Column(Float, default=1.0)
     description = Column(String, nullable=True)
+
+
+class MarginalCooperativeInfluence(Base):
+    """
+    Stores counterfactual influence deltas for an agent removal simulation.
+    """
+    __tablename__ = 'marginal_cooperative_influence'
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    source_node_id = Column(String, ForeignKey('impact_nodes.id'), nullable=False)
+    removed_agent_id = Column(String, nullable=False)
+    full_projection_vector = Column(JSON, nullable=False)
+    counterfactual_projection_vector = Column(JSON, nullable=False)
+    marginal_influence_vector = Column(JSON, nullable=False)
+    total_marginal_influence = Column(Float, nullable=False, default=0.0)
+    time_horizon = Column(Float, nullable=False)
+    dependency_references = Column(JSON, nullable=True)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    source_node = relationship("ImpactNode", foreign_keys=[source_node_id])
+
+
+class SynergyDensityMetric(Base):
+    """
+    Stores the results of synergy density computations comparing independent vs cooperative projections.
+    """
+    __tablename__ = 'synergy_density_metrics'
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    
+    # List of agent action node IDs involved in the collaboration
+    collaboration_structure = Column(JSON, nullable=False)
+    
+    # Aggregated sum of independent impact projections
+    independent_impact_sum = Column(JSON, nullable=False)
+    
+    # Impact projection when agents operate together
+    cooperative_impact = Column(JSON, nullable=False)
+    
+    # Normalized amplification ratio: (cooperative_impact / independent_impact_sum)
+    synergy_density_ratio = Column(Float, nullable=False)
+    
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<SynergyDensityMetric(id={self.id[:8]}, ratio={self.synergy_density_ratio:.4f})>"
+
+
+class CooperativeIntelligenceMetric(Base):
+    """
+    Stores structured cooperative intelligence sub-metrics and their multi-dimensional vector form.
+    """
+    __tablename__ = 'cooperative_intelligence_metrics'
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    collaboration_structure = Column(JSON, nullable=False)
+
+    # Sub-metrics persisted independently.
+    uncertainty_reduction = Column(JSON, nullable=False)
+    dependency_graph_enrichment = Column(JSON, nullable=False)
+    predictive_calibration_improvement = Column(JSON, nullable=False)
+    cross_role_integration_depth = Column(JSON, nullable=False)
+
+    # Multi-dimensional vector representation (no scalar collapse).
+    cooperative_intelligence_vector = Column(JSON, nullable=False)
+
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<CooperativeIntelligenceMetric(id={self.id[:8]})>"
