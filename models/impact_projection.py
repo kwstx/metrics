@@ -1,6 +1,6 @@
 from datetime import datetime
 import uuid
-from sqlalchemy import Column, String, Float, DateTime, JSON, ForeignKey
+from sqlalchemy import Column, String, Float, DateTime, JSON, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 from .base import Base
 
@@ -126,6 +126,47 @@ class CooperativeIntelligenceMetric(Base):
 
     def __repr__(self):
         return f"<CooperativeIntelligenceMetric(id={self.id[:8]})>"
+
+
+class SynergySignature(Base):
+    """
+    Stores recurring multi-agent collaboration patterns that consistently exceed
+    baseline synergy density across longitudinal observations.
+    """
+    __tablename__ = 'synergy_signatures'
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+
+    # Canonicalized agent/node combination participating in the pattern.
+    collaboration_structure = Column(JSON, nullable=False)
+
+    # Number of observed historical synergy events for this pattern.
+    observation_frequency = Column(Integer, nullable=False)
+
+    # Fraction of observations above global baseline synergy density.
+    above_baseline_consistency = Column(Float, nullable=False)
+
+    # Mean synergy density ratio for this pattern.
+    mean_synergy_density_ratio = Column(Float, nullable=False)
+
+    # Mean amplification above global baseline.
+    amplification_magnitude = Column(Float, nullable=False)
+
+    # Stability of amplification over time (higher means less variance).
+    stability_score = Column(Float, nullable=False)
+
+    # Baseline used when this signature was last computed.
+    baseline_synergy_density = Column(Float, nullable=False)
+
+    first_observed_at = Column(DateTime, nullable=False)
+    last_observed_at = Column(DateTime, nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return (
+            f"<SynergySignature(id={self.id[:8]}, freq={self.observation_frequency}, "
+            f"amp={self.amplification_magnitude:.4f}, stability={self.stability_score:.4f})>"
+        )
 
 
 class ImpactOutcome(Base):

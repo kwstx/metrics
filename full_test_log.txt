@@ -1,0 +1,113 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.0, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\galan\metrics
+plugins: anyio-4.12.1, asyncio-1.3.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 55 items
+
+tests/test_cooperative_intelligence_index.py::test_generate_cooperative_intelligence_vector PASSED [  1%]
+tests/test_cooperative_stability.py::test_record_stability_metric PASSED [  3%]
+tests/test_cooperative_stability.py::test_stability_coefficient_logic PASSED [  5%]
+tests/test_cooperative_stability.py::test_aggregate_stability PASSED     [  7%]
+tests/test_counterfactual_simulation.py::test_counterfactual_removes_agent_outgoing_edges PASSED [  9%]
+tests/test_impact_forecast.py::test_forecast_engine_full_path PASSED     [ 10%]
+tests/test_impact_graph.py::test_impact_graph_flow PASSED                [ 12%]
+tests/test_impact_provenance_tracing.py::TestDispatch::test_unsupported_type_raises PASSED [ 14%]
+tests/test_impact_provenance_tracing.py::TestDispatch::test_all_supported_types_dispatchable PASSED [ 16%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_trace_structure PASSED [ 18%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_trace_contains_influence_propagation PASSED [ 20%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_trace_reproducibility_matches PASSED [ 21%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_verify_reproducibility_passes PASSED [ 23%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_trace_edges_include_weights PASSED [ 25%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_not_found_raises PASSED [ 27%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergy::test_trace_structure PASSED [ 29%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergy::test_reproducibility PASSED [ 30%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergy::test_not_found_raises PASSED [ 32%]
+tests/test_impact_provenance_tracing.py::TestTraceStability::test_trace_structure PASSED [ 34%]
+tests/test_impact_provenance_tracing.py::TestTraceStability::test_reproducibility PASSED [ 36%]
+tests/test_impact_provenance_tracing.py::TestTraceStability::test_derivation_formula_present PASSED [ 38%]
+tests/test_impact_provenance_tracing.py::TestTraceStability::test_not_found_raises PASSED [ 40%]
+tests/test_impact_provenance_tracing.py::TestTraceIntelligence::test_trace_structure PASSED [ 41%]
+tests/test_impact_provenance_tracing.py::TestTraceIntelligence::test_reproducibility PASSED [ 43%]
+tests/test_impact_provenance_tracing.py::TestTraceIntelligence::test_not_found_raises PASSED [ 45%]
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_trace_structure PASSED [ 47%]
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_deviations_present PASSED [ 49%]
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_reproducibility_magnitude PASSED [ 50%]
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_reproducibility_timing PASSED [ 52%]
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_not_found_raises PASSED [ 54%]
+tests/test_impact_provenance_tracing.py::TestTraceMarginalInfluence::test_trace_structure PASSED [ 56%]
+tests/test_impact_provenance_tracing.py::TestTraceMarginalInfluence::test_path_present PASSED [ 58%]
+tests/test_impact_provenance_tracing.py::TestTraceMarginalInfluence::test_reproducibility PASSED [ 60%]
+tests/test_impact_provenance_tracing.py::TestTraceMarginalInfluence::test_not_found_raises PASSED [ 61%]
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_trace_structure PASSED [ 63%]
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_decay_parameters PASSED [ 65%]
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_temporal_context PASSED [ 67%]
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_not_found_raises PASSED [ 69%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergySignature::test_trace_structure PASSED [ 70%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergySignature::test_reproducibility_frequency PASSED [ 72%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergySignature::test_reproducibility_stability PASSED [ 74%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergySignature::test_not_found_raises PASSED [ 76%]
+tests/test_impact_provenance_tracing.py::TestVerifyReproducibility::test_verified_projection PASSED [ 78%]
+tests/test_impact_provenance_tracing.py::TestVerifyReproducibility::test_verified_stability PASSED [ 80%]
+tests/test_impact_provenance_tracing.py::TestEdgeCases::test_projection_no_reliability_no_multiplier PASSED [ 81%]
+tests/test_impact_provenance_tracing.py::TestEdgeCases::test_trace_with_isolated_node_no_edges PASSED [ 83%]
+tests/test_impact_provenance_tracing.py::TestEdgeCases::test_synergy_context_linked_to_projection PASSED [ 85%]
+tests/test_impact_provenance_tracing.py::TestDeepCausalChain::test_multi_hop_trace PASSED [ 87%]
+tests/test_persistent_synergy_signature.py::test_detects_recurring_above_baseline_signature PASSED [ 89%]
+tests/test_persistent_synergy_signature.py::test_detection_upserts_existing_signature PASSED [ 90%]
+tests/test_predictive_calibration.py::test_predictive_calibration_full_loop PASSED [ 92%]
+tests/test_predictive_calibration.py::test_synergy_calibration PASSED    [ 94%]
+tests/test_synergy_density.py::test_synergy_calculation PASSED           [ 96%]
+tests/test_temporal_impact_memory.py::test_temporal_ledger_accumulates_with_configurable_decay PASSED [ 98%]
+tests/test_temporal_impact_memory.py::test_forecast_chain_returns_temporal_accumulation_instead_of_reset PASSED [100%]
+
+============================== warnings summary ===============================
+tests/test_cooperative_intelligence_index.py: 4 warnings
+tests/test_cooperative_stability.py: 3 warnings
+tests/test_counterfactual_simulation.py: 4 warnings
+tests/test_impact_forecast.py: 5 warnings
+tests/test_impact_graph.py: 2 warnings
+tests/test_impact_provenance_tracing.py: 282 warnings
+tests/test_persistent_synergy_signature.py: 2 warnings
+tests/test_predictive_calibration.py: 11 warnings
+tests/test_synergy_density.py: 4 warnings
+tests/test_temporal_impact_memory.py: 6 warnings
+  C:\Users\galan\AppData\Roaming\Python\Python314\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_trace_structure
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_deviations_present
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_reproducibility_magnitude
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_reproducibility_timing
+tests/test_predictive_calibration.py::test_predictive_calibration_full_loop
+tests/test_predictive_calibration.py::test_synergy_calibration
+  C:\Users\galan\metrics\engine\predictive_calibration_engine.py:141: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    agent_rel.last_updated = datetime.utcnow()
+
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_trace_structure
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_decay_parameters
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_temporal_context
+tests/test_temporal_impact_memory.py::test_forecast_chain_returns_temporal_accumulation_instead_of_reset
+tests/test_temporal_impact_memory.py::test_forecast_chain_returns_temporal_accumulation_instead_of_reset
+  C:\Users\galan\metrics\engine\temporal_impact_memory_engine.py:40: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=timestamp or datetime.utcnow(),
+
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_trace_structure
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_decay_parameters
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_temporal_context
+  C:\Users\galan\metrics\engine\impact_provenance_tracing_engine.py:421: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_temporal_impact_memory.py::test_temporal_ledger_accumulates_with_configurable_decay
+  C:\Users\galan\metrics\tests\test_temporal_impact_memory.py:27: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_temporal_impact_memory.py::test_forecast_chain_returns_temporal_accumulation_instead_of_reset
+tests/test_temporal_impact_memory.py::test_forecast_chain_returns_temporal_accumulation_instead_of_reset
+  C:\Users\galan\metrics\engine\temporal_impact_memory_engine.py:52: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = as_of or datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+====================== 55 passed, 340 warnings in 3.63s =======================
+

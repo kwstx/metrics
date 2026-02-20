@@ -1,0 +1,192 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.14.0, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\galan\metrics
+plugins: anyio-4.12.1, asyncio-1.3.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 41 items
+
+tests/test_impact_provenance_tracing.py::TestDispatch::test_unsupported_type_raises PASSED [  2%]
+tests/test_impact_provenance_tracing.py::TestDispatch::test_all_supported_types_dispatchable PASSED [  4%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_trace_structure PASSED [  7%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_trace_contains_influence_propagation PASSED [  9%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_trace_reproducibility_matches PASSED [ 12%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_verify_reproducibility_passes PASSED [ 14%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_trace_edges_include_weights PASSED [ 17%]
+tests/test_impact_provenance_tracing.py::TestTraceProjection::test_not_found_raises PASSED [ 19%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergy::test_trace_structure PASSED [ 21%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergy::test_reproducibility PASSED [ 24%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergy::test_not_found_raises PASSED [ 26%]
+tests/test_impact_provenance_tracing.py::TestTraceStability::test_trace_structure PASSED [ 29%]
+tests/test_impact_provenance_tracing.py::TestTraceStability::test_reproducibility PASSED [ 31%]
+tests/test_impact_provenance_tracing.py::TestTraceStability::test_derivation_formula_present PASSED [ 34%]
+tests/test_impact_provenance_tracing.py::TestTraceStability::test_not_found_raises PASSED [ 36%]
+tests/test_impact_provenance_tracing.py::TestTraceIntelligence::test_trace_structure PASSED [ 39%]
+tests/test_impact_provenance_tracing.py::TestTraceIntelligence::test_reproducibility PASSED [ 41%]
+tests/test_impact_provenance_tracing.py::TestTraceIntelligence::test_not_found_raises PASSED [ 43%]
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_trace_structure PASSED [ 46%]
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_deviations_present PASSED [ 48%]
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_reproducibility_magnitude PASSED [ 51%]
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_reproducibility_timing PASSED [ 53%]
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_not_found_raises PASSED [ 56%]
+tests/test_impact_provenance_tracing.py::TestTraceMarginalInfluence::test_trace_structure PASSED [ 58%]
+tests/test_impact_provenance_tracing.py::TestTraceMarginalInfluence::test_path_present PASSED [ 60%]
+tests/test_impact_provenance_tracing.py::TestTraceMarginalInfluence::test_reproducibility PASSED [ 63%]
+tests/test_impact_provenance_tracing.py::TestTraceMarginalInfluence::test_not_found_raises PASSED [ 65%]
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_trace_structure PASSED [ 68%]
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_decay_parameters PASSED [ 70%]
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_temporal_context PASSED [ 73%]
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_not_found_raises PASSED [ 75%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergySignature::test_trace_structure FAILED [ 78%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergySignature::test_reproducibility_frequency FAILED [ 80%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergySignature::test_reproducibility_stability FAILED [ 82%]
+tests/test_impact_provenance_tracing.py::TestTraceSynergySignature::test_not_found_raises PASSED [ 85%]
+tests/test_impact_provenance_tracing.py::TestVerifyReproducibility::test_verified_projection PASSED [ 87%]
+tests/test_impact_provenance_tracing.py::TestVerifyReproducibility::test_verified_stability PASSED [ 90%]
+tests/test_impact_provenance_tracing.py::TestEdgeCases::test_projection_no_reliability_no_multiplier PASSED [ 92%]
+tests/test_impact_provenance_tracing.py::TestEdgeCases::test_trace_with_isolated_node_no_edges PASSED [ 95%]
+tests/test_impact_provenance_tracing.py::TestEdgeCases::test_synergy_context_linked_to_projection PASSED [ 97%]
+tests/test_impact_provenance_tracing.py::TestDeepCausalChain::test_multi_hop_trace PASSED [100%]
+
+================================== FAILURES ===================================
+_______________ TestTraceSynergySignature.test_trace_structure ________________
+
+self = <test_impact_provenance_tracing.TestTraceSynergySignature object at 0x000002B4D329C7D0>
+session = <sqlalchemy.orm.session.Session object at 0x000002B4D37FD6A0>
+graph_data = {'a1': <ImpactNode(id=1404cd01, type=ACTION, magnitude=10.0)>, 'b1': <ImpactNode(id=f98bc457, type=ACTION, magnitude=5...pactNode(id=45bd2abc, type=ACTION, magnitude=8.0)>, 'f1': <ImpactNode(id=de0ff338, type=FEEDBACK, magnitude=3.0)>, ...}
+tracing_engine = <engine.impact_provenance_tracing_engine.ImpactProvenanceTracingEngine object at 0x000002B4D3796C90>
+
+    def test_trace_structure(self, session, graph_data, tracing_engine):
+>       sig = self._create_signature(session, graph_data)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_impact_provenance_tracing.py:470: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_impact_provenance_tracing.TestTraceSynergySignature object at 0x000002B4D329C7D0>
+session = <sqlalchemy.orm.session.Session object at 0x000002B4D37FD6A0>
+graph_data = {'a1': <ImpactNode(id=1404cd01, type=ACTION, magnitude=10.0)>, 'b1': <ImpactNode(id=f98bc457, type=ACTION, magnitude=5...pactNode(id=45bd2abc, type=ACTION, magnitude=8.0)>, 'f1': <ImpactNode(id=de0ff338, type=FEEDBACK, magnitude=3.0)>, ...}
+
+    def _create_signature(self, session, graph_data) -> SynergySignature:
+        """Creates the prerequisites (multiple synergy metrics) then detects signatures."""
+        from engine.synergy_density_engine import SynergyDensityEngine
+        from engine.persistent_synergy_signature_engine import PersistentSynergySignatureEngine
+    
+        sde = SynergyDensityEngine(session)
+        agent_ids = [graph_data["a1"].id, graph_data["b1"].id]
+    
+        # Create at least 3 synergy density metrics for the same pattern
+        for _ in range(4):
+            sde.calculate_synergy_density(agent_ids)
+    
+        psse = PersistentSynergySignatureEngine(session)
+        signatures = psse.detect_persistent_signatures(min_frequency=3, min_consistency=0.0)
+>       assert len(signatures) >= 1
+E       assert 0 >= 1
+E        +  where 0 = len([])
+
+tests\test_impact_provenance_tracing.py:466: AssertionError
+__________ TestTraceSynergySignature.test_reproducibility_frequency ___________
+
+self = <test_impact_provenance_tracing.TestTraceSynergySignature object at 0x000002B4D329C910>
+session = <sqlalchemy.orm.session.Session object at 0x000002B4D37FDFD0>
+graph_data = {'a1': <ImpactNode(id=c70e13bc, type=ACTION, magnitude=10.0)>, 'b1': <ImpactNode(id=0e9a3717, type=ACTION, magnitude=5...pactNode(id=38d3dd3c, type=ACTION, magnitude=8.0)>, 'f1': <ImpactNode(id=bddbd7f5, type=FEEDBACK, magnitude=3.0)>, ...}
+tracing_engine = <engine.impact_provenance_tracing_engine.ImpactProvenanceTracingEngine object at 0x000002B4D4B95D30>
+
+    def test_reproducibility_frequency(self, session, graph_data, tracing_engine):
+>       sig = self._create_signature(session, graph_data)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_impact_provenance_tracing.py:479: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_impact_provenance_tracing.TestTraceSynergySignature object at 0x000002B4D329C910>
+session = <sqlalchemy.orm.session.Session object at 0x000002B4D37FDFD0>
+graph_data = {'a1': <ImpactNode(id=c70e13bc, type=ACTION, magnitude=10.0)>, 'b1': <ImpactNode(id=0e9a3717, type=ACTION, magnitude=5...pactNode(id=38d3dd3c, type=ACTION, magnitude=8.0)>, 'f1': <ImpactNode(id=bddbd7f5, type=FEEDBACK, magnitude=3.0)>, ...}
+
+    def _create_signature(self, session, graph_data) -> SynergySignature:
+        """Creates the prerequisites (multiple synergy metrics) then detects signatures."""
+        from engine.synergy_density_engine import SynergyDensityEngine
+        from engine.persistent_synergy_signature_engine import PersistentSynergySignatureEngine
+    
+        sde = SynergyDensityEngine(session)
+        agent_ids = [graph_data["a1"].id, graph_data["b1"].id]
+    
+        # Create at least 3 synergy density metrics for the same pattern
+        for _ in range(4):
+            sde.calculate_synergy_density(agent_ids)
+    
+        psse = PersistentSynergySignatureEngine(session)
+        signatures = psse.detect_persistent_signatures(min_frequency=3, min_consistency=0.0)
+>       assert len(signatures) >= 1
+E       assert 0 >= 1
+E        +  where 0 = len([])
+
+tests\test_impact_provenance_tracing.py:466: AssertionError
+__________ TestTraceSynergySignature.test_reproducibility_stability ___________
+
+self = <test_impact_provenance_tracing.TestTraceSynergySignature object at 0x000002B4D31C3230>
+session = <sqlalchemy.orm.session.Session object at 0x000002B4D37FE270>
+graph_data = {'a1': <ImpactNode(id=bf0ad48c, type=ACTION, magnitude=10.0)>, 'b1': <ImpactNode(id=85f3e068, type=ACTION, magnitude=5...pactNode(id=4a8e4492, type=ACTION, magnitude=8.0)>, 'f1': <ImpactNode(id=b3faa25c, type=FEEDBACK, magnitude=3.0)>, ...}
+tracing_engine = <engine.impact_provenance_tracing_engine.ImpactProvenanceTracingEngine object at 0x000002B4D4BC6DB0>
+
+    def test_reproducibility_stability(self, session, graph_data, tracing_engine):
+>       sig = self._create_signature(session, graph_data)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_impact_provenance_tracing.py:486: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_impact_provenance_tracing.TestTraceSynergySignature object at 0x000002B4D31C3230>
+session = <sqlalchemy.orm.session.Session object at 0x000002B4D37FE270>
+graph_data = {'a1': <ImpactNode(id=bf0ad48c, type=ACTION, magnitude=10.0)>, 'b1': <ImpactNode(id=85f3e068, type=ACTION, magnitude=5...pactNode(id=4a8e4492, type=ACTION, magnitude=8.0)>, 'f1': <ImpactNode(id=b3faa25c, type=FEEDBACK, magnitude=3.0)>, ...}
+
+    def _create_signature(self, session, graph_data) -> SynergySignature:
+        """Creates the prerequisites (multiple synergy metrics) then detects signatures."""
+        from engine.synergy_density_engine import SynergyDensityEngine
+        from engine.persistent_synergy_signature_engine import PersistentSynergySignatureEngine
+    
+        sde = SynergyDensityEngine(session)
+        agent_ids = [graph_data["a1"].id, graph_data["b1"].id]
+    
+        # Create at least 3 synergy density metrics for the same pattern
+        for _ in range(4):
+            sde.calculate_synergy_density(agent_ids)
+    
+        psse = PersistentSynergySignatureEngine(session)
+        signatures = psse.detect_persistent_signatures(min_frequency=3, min_consistency=0.0)
+>       assert len(signatures) >= 1
+E       assert 0 >= 1
+E        +  where 0 = len([])
+
+tests\test_impact_provenance_tracing.py:466: AssertionError
+============================== warnings summary ===============================
+tests/test_impact_provenance_tracing.py: 276 warnings
+  C:\Users\galan\AppData\Roaming\Python\Python314\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_trace_structure
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_deviations_present
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_reproducibility_magnitude
+tests/test_impact_provenance_tracing.py::TestTraceCalibration::test_reproducibility_timing
+  C:\Users\galan\metrics\engine\predictive_calibration_engine.py:141: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    agent_rel.last_updated = datetime.utcnow()
+
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_trace_structure
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_decay_parameters
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_temporal_context
+  C:\Users\galan\metrics\engine\temporal_impact_memory_engine.py:40: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=timestamp or datetime.utcnow(),
+
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_trace_structure
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_decay_parameters
+tests/test_impact_provenance_tracing.py::TestTraceTemporalEntry::test_temporal_context
+  C:\Users\galan\metrics\engine\impact_provenance_tracing_engine.py:421: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_impact_provenance_tracing.py::TestTraceSynergySignature::test_trace_structure
+FAILED tests/test_impact_provenance_tracing.py::TestTraceSynergySignature::test_reproducibility_frequency
+FAILED tests/test_impact_provenance_tracing.py::TestTraceSynergySignature::test_reproducibility_stability
+================= 3 failed, 38 passed, 286 warnings in 3.35s ==================
