@@ -3,3 +3,6 @@ psycopg2-binary  # In case we want to move to Postgres later
 networkx         # Excellent for graph traversal and path computation
 pydantic         # For data validation
 pytest           # Test framework
+fastapi          # HTTP API layer
+uvicorn          # ASGI server for deployment
+httpx            # FastAPI TestClient dependency
