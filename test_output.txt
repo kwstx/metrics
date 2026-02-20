@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "C:\Users\galan\metrics\tests\test_impact_graph.py", line 2, in <module>
+    from models.impact_graph import init_db, ImpactNode, ImpactEdge
+  File "C:\Users\galan\metrics\models\impact_graph.py", line 28, in <module>
+    class ImpactEdge(Base):
+    ...<20 lines>...
+            return f"<ImpactEdge(source={self.source_node_id[:8]}, target={self.target_node_id[:8]}, weight={self.causal_weight})>"
+  File "C:\Users\galan\AppData\Roaming\Python\Python314\site-packages\sqlalchemy\orm\decl_api.py", line 199, in __init__
+    _as_declarative(reg, cls, dict_)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\galan\AppData\Roaming\Python\Python314\site-packages\sqlalchemy\orm\decl_base.py", line 245, in _as_declarative
+    return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\galan\AppData\Roaming\Python\Python314\site-packages\sqlalchemy\orm\decl_base.py", line 326, in setup_mapping
+    return _ClassScanMapperConfig(
+        registry, cls_, dict_, table, mapper_kw
+    )
+  File "C:\Users\galan\AppData\Roaming\Python\Python314\site-packages\sqlalchemy\orm\decl_base.py", line 573, in __init__
+    self._extract_mappable_attributes()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\galan\AppData\Roaming\Python\Python314\site-packages\sqlalchemy\orm\decl_base.py", line 1530, in _extract_mappable_attributes
+    raise exc.InvalidRequestError(
+    ...<2 lines>...
+    )
+sqlalchemy.exc.InvalidRequestError: Attribute name 'metadata' is reserved when using the Declarative API.
