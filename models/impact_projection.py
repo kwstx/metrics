@@ -126,3 +126,73 @@ class CooperativeIntelligenceMetric(Base):
 
     def __repr__(self):
         return f"<CooperativeIntelligenceMetric(id={self.id[:8]})>"
+
+
+class ImpactOutcome(Base):
+    """
+    Stores the realized real-world outcome of an agent's action.
+    """
+    __tablename__ = 'impact_outcomes'
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    projection_id = Column(String, ForeignKey('impact_projections.id'), nullable=False)
+    
+    # Realized multi-dimensional impact vector
+    realized_impact_vector = Column(JSON, nullable=False)
+    
+    # When the outcome was realized (for timing deviation)
+    realized_timestamp = Column(DateTime, default=datetime.utcnow)
+    
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    # Relationship to projection
+    projection = relationship("ImpactProjection")
+
+
+class CalibrationEvent(Base):
+    """
+    Persists the results of a predictive calibration comparison.
+    """
+    __tablename__ = 'calibration_events'
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    outcome_id = Column(String, ForeignKey('impact_outcomes.id'), nullable=False)
+    
+    magnitude_deviation = Column(Float, nullable=False)
+    timing_deviation = Column(Float, nullable=False)
+    synergy_assumption_error = Column(Float, nullable=False)
+    
+    # The reliability coefficient AFTER the update
+    new_reliability_coefficient = Column(Float, nullable=False)
+    reliability_delta = Column(Float, nullable=False)
+    
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    outcome = relationship("ImpactOutcome")
+
+
+class TemporalImpactLedgerEntry(Base):
+    """
+    Stores a rolling impact contribution for a task chain so influence persists over time.
+    """
+    __tablename__ = 'temporal_impact_ledger_entries'
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    task_sequence_id = Column(String, nullable=False, index=True)
+    source_node_id = Column(String, ForeignKey('impact_nodes.id'), nullable=False)
+    projection_id = Column(String, ForeignKey('impact_projections.id'), nullable=True)
+
+    # Raw impact contribution at ingestion time.
+    impact_vector = Column(JSON, nullable=False)
+
+    # Decay settings used to weight this contribution over time.
+    decay_function = Column(String, nullable=False, default="exponential")
+    decay_rate = Column(Float, nullable=False, default=0.01)
+    decay_floor = Column(Float, nullable=False, default=0.0)
+
+    # Optional chain metadata for debugging and attribution.
+    entry_metadata = Column(JSON, nullable=True)
+    timestamp = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    source_node = relationship("ImpactNode", foreign_keys=[source_node_id])
+    projection = relationship("ImpactProjection", foreign_keys=[projection_id])

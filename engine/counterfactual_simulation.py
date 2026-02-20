@@ -47,7 +47,7 @@ class CounterfactualSimulation:
         )
 
         marginal_vector = self._compute_delta(full_projection, counterfactual_projection)
-        total_marginal = sum(marginal_vector.values())
+        total_marginal = self._aggregate_total_marginal(marginal_vector)
         dependencies = self.forecast_engine._get_dependencies(source_node_id)
 
         metric = MarginalCooperativeInfluence(
@@ -83,3 +83,9 @@ class CounterfactualSimulation:
             if diff != 0.0:
                 deltas[key] = diff
         return deltas
+
+    def _aggregate_total_marginal(self, marginal_vector: Dict[str, float]) -> float:
+        outcome_deltas = [value for key, value in marginal_vector.items() if "ACTION" not in key]
+        if outcome_deltas:
+            return sum(outcome_deltas)
+        return sum(marginal_vector.values())
