@@ -3,7 +3,8 @@ import uuid
 from sqlalchemy import Column, String, Float, DateTime, JSON, ForeignKey, create_engine
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 
-Base = declarative_base()
+from .base import Base
+
 
 class ImpactNode(Base):
     """

@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Set
 from sqlalchemy.orm import Session
 from models.impact_graph import ImpactNode, ImpactEdge
 import networkx as nx
@@ -101,12 +101,13 @@ class GraphManager:
 
         return total_impact
 
-    def _build_nx_graph(self) -> nx.DiGraph:
+    def _build_nx_graph(self, disabled_source_node_ids: Optional[Set[str]] = None) -> nx.DiGraph:
         """
         Internal helper to build a NetworkX directed graph from the database.
         Allows for efficient graph algorithms.
         """
         G = nx.DiGraph()
+        disabled_source_node_ids = disabled_source_node_ids or set()
         nodes = self.session.query(ImpactNode).all()
         edges = self.session.query(ImpactEdge).all()
         
@@ -114,6 +115,8 @@ class GraphManager:
             G.add_node(n.id, magnitude=n.magnitude, type=n.outcome_type)
         
         for e in edges:
+            if e.source_node_id in disabled_source_node_ids:
+                continue
             G.add_edge(e.source_node_id, e.target_node_id, 
                        weight=e.causal_weight, 
                        confidence=e.confidence_score,
