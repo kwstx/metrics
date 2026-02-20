@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from models.impact_graph import ImpactNode, ImpactEdge
 from models.impact_projection import ImpactProjection, AgentReliability, DomainMultiplier
 from .graph_manager import GraphManager
+from .temporal_impact_memory_engine import TemporalImpactMemoryEngine
 import networkx as nx
 from datetime import datetime
 
@@ -14,8 +15,17 @@ class ImpactForecastEngine:
     def __init__(self, session: Session):
         self.session = session
         self.graph_manager = GraphManager(session)
+        self.temporal_memory_engine = TemporalImpactMemoryEngine(session)
 
-    def forecast_action(self, action_node_id: str, time_horizon: float = 30.0) -> ImpactProjection:
+    def forecast_action(
+        self,
+        action_node_id: str,
+        time_horizon: float = 30.0,
+        task_sequence_id: Optional[str] = None,
+        decay_function: str = "exponential",
+        decay_rate: float = 0.01,
+        decay_floor: float = 0.0,
+    ) -> ImpactProjection:
         """
         Takes an action node ID and generates a full ImpactProjection.
         """
@@ -54,6 +64,26 @@ class ImpactForecastEngine:
 
         self.session.add(projection)
         self.session.commit()
+
+        # 8. Optional temporal chain accumulation:
+        # append this projection contribution and return decayed rolling totals.
+        if task_sequence_id:
+            self.temporal_memory_engine.append_contribution(
+                task_sequence_id=task_sequence_id,
+                source_node_id=action_node.id,
+                projection_id=projection.id,
+                impact_vector=impact_vector,
+                decay_function=decay_function,
+                decay_rate=decay_rate,
+                decay_floor=decay_floor,
+                entry_metadata={"time_horizon": time_horizon},
+            )
+            accumulated = self.temporal_memory_engine.get_accumulated_impact(task_sequence_id)
+            projection.predicted_impact_vector = accumulated
+            projection.uncertainty_bounds = self._calculate_uncertainty(accumulated, base_uncertainty, reliability)
+            projection.confidence_interval = projection.uncertainty_bounds
+            self.session.commit()
+
         return projection
 
     def _get_agent_reliability(self, agent_id: Optional[str]) -> float:

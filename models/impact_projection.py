@@ -196,3 +196,36 @@ class TemporalImpactLedgerEntry(Base):
 
     source_node = relationship("ImpactNode", foreign_keys=[source_node_id])
     projection = relationship("ImpactProjection", foreign_keys=[projection_id])
+
+
+class CooperativeStabilityMetric(Base):
+    """
+    Measures how consistently an agent improves collaborative system behavior across varying team compositions.
+    """
+    __tablename__ = 'cooperative_stability_metrics'
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    agent_id = Column(String, nullable=False, index=True)
+
+    # Negotiation convergence time in seconds
+    negotiation_convergence_time = Column(Float, nullable=False)
+
+    # Variance in resource allocation efficiency (0.0 means perfect efficiency parity)
+    resource_allocation_variance = Column(Float, nullable=False)
+
+    # Frequency of conflict resolution interventions
+    conflict_resolution_frequency = Column(Float, nullable=False)
+
+    # Overall team performance stability (standard deviation of team output)
+    team_performance_stability = Column(Float, nullable=False)
+
+    # Computed StabilityCoefficient reflecting structural cooperation quality
+    stability_coefficient = Column(Float, nullable=False)
+
+    # Team composition used during the measurement (list of agent roles or IDs)
+    team_composition = Column(JSON, nullable=False)
+
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<CooperativeStabilityMetric(agent={self.agent_id[:8]}, stability={self.stability_coefficient:.4f})>"
