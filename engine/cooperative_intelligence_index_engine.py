@@ -5,6 +5,7 @@ import networkx as nx
 from sqlalchemy.orm import Session
 
 from engine.graph_manager import GraphManager
+from engine.agent_impact_profile_engine import AgentImpactProfileEngine
 from models.impact_graph import ImpactNode
 from models.impact_projection import CooperativeIntelligenceMetric
 
@@ -17,6 +18,7 @@ class CooperativeIntelligenceIndexEngine:
     def __init__(self, session: Session):
         self.session = session
         self.graph_manager = GraphManager(session)
+        self.profile_engine = AgentImpactProfileEngine(session)
 
     def generate_cooperative_intelligence_vector(
         self,
@@ -61,7 +63,25 @@ class CooperativeIntelligenceIndexEngine:
         )
         self.session.add(metric)
         self.session.commit()
+
+        self.profile_engine.update_cross_role_integration_depth(
+            agent_ids=self._resolve_agent_ids(agent_node_ids),
+            normalized_depth=cross_role_integration_depth["normalized_depth"],
+        )
+
         return metric
+
+    def _resolve_agent_ids(self, node_ids: List[str]) -> Set[str]:
+        agent_ids: Set[str] = set()
+        for node_id in node_ids:
+            node = self._get_node(node_id)
+            if not node:
+                continue
+            context = node.domain_context or {}
+            agent_id = context.get("agent_id") or context.get("agent")
+            if agent_id:
+                agent_ids.add(agent_id)
+        return agent_ids
 
     def _collect_involved_nodes(self, graph: nx.DiGraph, start_node_ids: List[str]) -> Set[str]:
         involved_nodes: Set[str] = set()

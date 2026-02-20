@@ -2,3 +2,4 @@ sqlalchemy
 psycopg2-binary  # In case we want to move to Postgres later
 networkx         # Excellent for graph traversal and path computation
 pydantic         # For data validation
+pytest           # Test framework

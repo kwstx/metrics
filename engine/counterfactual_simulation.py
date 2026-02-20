@@ -2,6 +2,7 @@ from typing import Dict, List, Set
 from sqlalchemy.orm import Session
 
 from engine.impact_forecast_engine import ImpactForecastEngine
+from engine.agent_impact_profile_engine import AgentImpactProfileEngine
 from models.impact_graph import ImpactNode
 from models.impact_projection import MarginalCooperativeInfluence
 
@@ -15,6 +16,7 @@ class CounterfactualSimulation:
     def __init__(self, session: Session):
         self.session = session
         self.forecast_engine = ImpactForecastEngine(session)
+        self.profile_engine = AgentImpactProfileEngine(session)
 
     def simulate_agent_removal(
         self,
@@ -62,6 +64,13 @@ class CounterfactualSimulation:
         )
         self.session.add(metric)
         self.session.commit()
+
+        self.profile_engine.update_marginal_cooperative_influence(
+            agent_id=removed_agent_id,
+            total_marginal_influence=total_marginal,
+            marginal_vector=marginal_vector,
+        )
+
         return metric
 
     def _get_agent_action_node_ids(self, agent_id: str) -> Set[str]:

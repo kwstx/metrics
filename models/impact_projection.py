@@ -47,6 +47,19 @@ class AgentReliability(Base):
     reliability_coefficient = Column(Float, default=1.0)
     last_updated = Column(DateTime, default=datetime.utcnow)
 
+
+class AgentImpactProfile(Base):
+    """
+    Stores a structured, multi-dimensional impact profile per agent.
+    Intentionally avoids any single scalar rank/leaderboard score.
+    """
+    __tablename__ = 'agent_impact_profiles'
+
+    agent_id = Column(String, primary_key=True)
+    impact_dimensions = Column(JSON, nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    last_updated = Column(DateTime, default=datetime.utcnow)
+
 class DomainMultiplier(Base):
     """
     Stores multipliers specific to domains or impact types.

@@ -1,0 +1,116 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.0, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: c:\Users\galan\metrics
+plugins: anyio-4.12.1, asyncio-1.3.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 31 items
+
+tests/test_metrics_feedback_api.py::TestResponseEnvelope::test_success_envelope_shape PASSED [  3%]
+tests/test_metrics_feedback_api.py::TestResponseEnvelope::test_error_envelope_shape PASSED [  6%]
+tests/test_metrics_feedback_api.py::TestAlgorithmRegistry::test_default_versions_exist PASSED [  9%]
+tests/test_metrics_feedback_api.py::TestAlgorithmRegistry::test_register_and_retrieve_new_version PASSED [ 12%]
+tests/test_metrics_feedback_api.py::TestAlgorithmRegistry::test_deprecate_version PASSED [ 16%]
+tests/test_metrics_feedback_api.py::TestAlgorithmRegistry::test_list_versions PASSED [ 19%]
+tests/test_metrics_feedback_api.py::TestAlgorithmRegistry::test_unknown_operation_raises PASSED [ 22%]
+tests/test_metrics_feedback_api.py::TestSubmitAction::test_basic_action_submission PASSED [ 25%]
+tests/test_metrics_feedback_api.py::TestSubmitAction::test_action_with_causal_links PASSED [ 29%]
+tests/test_metrics_feedback_api.py::TestSubmitAction::test_action_audit_logged FAILED [ 32%]
+tests/test_metrics_feedback_api.py::TestRetrieveForecast::test_forecast_returns_structured_vector PASSED [ 35%]
+tests/test_metrics_feedback_api.py::TestRetrieveForecast::test_forecast_includes_uncertainty PASSED [ 38%]
+tests/test_metrics_feedback_api.py::TestRetrieveForecast::test_forecast_unknown_node_returns_error PASSED [ 41%]
+tests/test_metrics_feedback_api.py::TestRunCounterfactual::test_counterfactual_returns_marginal_vector PASSED [ 45%]
+tests/test_metrics_feedback_api.py::TestRunCounterfactual::test_counterfactual_invalid_source_returns_error PASSED [ 48%]
+tests/test_metrics_feedback_api.py::TestQuerySynergyDensity::test_synergy_density_computation PASSED [ 51%]
+tests/test_metrics_feedback_api.py::TestQuerySynergyDensity::test_synergy_density_empty_list_returns_error PASSED [ 54%]
+tests/test_metrics_feedback_api.py::TestAgentImpactProfile::test_profile_structure PASSED [ 58%]
+tests/test_metrics_feedback_api.py::TestAgentImpactProfile::test_profile_unknown_agent_returns_defaults PASSED [ 61%]
+tests/test_metrics_feedback_api.py::TestAgentImpactProfile::test_profile_includes_forecast_data PASSED [ 64%]
+tests/test_metrics_feedback_api.py::TestTraceProvenance::test_trace_projection_provenance PASSED [ 67%]
+tests/test_metrics_feedback_api.py::TestTraceProvenance::test_trace_invalid_type_returns_error PASSED [ 70%]
+tests/test_metrics_feedback_api.py::TestTraceProvenance::test_trace_invalid_id_returns_error PASSED [ 74%]
+tests/test_metrics_feedback_api.py::TestSubmitOutcome::test_outcome_recording_and_calibration PASSED [ 77%]
+tests/test_metrics_feedback_api.py::TestSubmitOutcome::test_outcome_without_calibration PASSED [ 80%]
+tests/test_metrics_feedback_api.py::TestSubmitOutcome::test_outcome_invalid_projection_returns_error PASSED [ 83%]
+tests/test_metrics_feedback_api.py::TestAuditLog::test_audit_log_populated PASSED [ 87%]
+tests/test_metrics_feedback_api.py::TestAuditLog::test_audit_log_filter_by_operation PASSED [ 90%]
+tests/test_metrics_feedback_api.py::TestAuditLog::test_audit_log_captures_errors PASSED [ 93%]
+tests/test_metrics_feedback_api.py::TestEndToEndFlow::test_full_lifecycle PASSED [ 96%]
+tests/test_metrics_feedback_api.py::TestEndToEndFlow::test_versioned_algorithm_is_recorded_in_audit PASSED [100%]
+
+================================== FAILURES ===================================
+__________________ TestSubmitAction.test_action_audit_logged __________________
+
+self = <test_metrics_feedback_api.TestSubmitAction object at 0x0000010C918A15B0>
+api = <api.metrics_feedback_api.MetricsFeedbackAPI object at 0x0000010C91A25450>
+db_session = <sqlalchemy.orm.session.Session object at 0x0000010C918ED940>
+
+    def test_action_audit_logged(self, api, db_session):
+        api.submit_action(
+            outcome_type="ACTION",
+            domain_context={"agent_id": "epsilon"},
+            magnitude=1.0,
+        )
+        entries = db_session.query(AuditLogEntry).filter_by(operation="submit_action").all()
+        assert len(entries) >= 1
+>       assert entries[0].algorithm_version == "1.0.0"
+E       AssertionError: assert '2.0.0' == '1.0.0'
+E         
+E         - 1.0.0
+E         ? ^
+E         + 2.0.0
+E         ? ^
+
+tests\test_metrics_feedback_api.py:237: AssertionError
+============================== warnings summary ===============================
+<string>:5
+<string>:5
+<string>:5
+<string>:5
+<string>:5
+<string>:5
+<string>:5
+  <string>:5: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/test_metrics_feedback_api.py: 37 warnings
+  c:\Users\galan\metrics\api\response_envelope.py:32: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat() + "Z")
+
+tests/test_metrics_feedback_api.py: 44 warnings
+  c:\Users\galan\metrics\api\algorithm_registry.py:113: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_metrics_feedback_api.py::TestAlgorithmRegistry::test_register_and_retrieve_new_version
+tests/test_metrics_feedback_api.py::TestAlgorithmRegistry::test_deprecate_version
+  c:\Users\galan\metrics\api\algorithm_registry.py:139: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    effective_from=effective_from or datetime.utcnow(),
+
+tests/test_metrics_feedback_api.py::TestAlgorithmRegistry::test_deprecate_version
+  c:\Users\galan\metrics\api\algorithm_registry.py:155: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    deprecated_at=datetime.utcnow(),
+
+tests/test_metrics_feedback_api.py: 143 warnings
+  C:\Users\galan\AppData\Roaming\Python\Python314\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_metrics_feedback_api.py: 16 warnings
+  c:\Users\galan\metrics\engine\agent_impact_profile_engine.py:141: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    profile.last_updated = datetime.utcnow()
+
+tests/test_metrics_feedback_api.py::TestSubmitOutcome::test_outcome_recording_and_calibration
+tests/test_metrics_feedback_api.py::TestSubmitOutcome::test_outcome_without_calibration
+tests/test_metrics_feedback_api.py::TestEndToEndFlow::test_full_lifecycle
+  c:\Users\galan\metrics\engine\predictive_calibration_engine.py:39: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    realized_timestamp=realized_timestamp or datetime.utcnow()
+
+tests/test_metrics_feedback_api.py::TestSubmitOutcome::test_outcome_recording_and_calibration
+tests/test_metrics_feedback_api.py::TestEndToEndFlow::test_full_lifecycle
+  c:\Users\galan\metrics\engine\predictive_calibration_engine.py:143: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    agent_rel.last_updated = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_metrics_feedback_api.py::TestSubmitAction::test_action_audit_logged
+================= 1 failed, 30 passed, 255 warnings in 2.24s ==================
+
+---STDERR---

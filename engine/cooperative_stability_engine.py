@@ -1,6 +1,7 @@
 from typing import Dict, List, Any
 from sqlalchemy.orm import Session
 from models.impact_projection import CooperativeStabilityMetric
+from .agent_impact_profile_engine import AgentImpactProfileEngine
 from datetime import datetime
 
 class CooperativeStabilityEngine:
@@ -13,6 +14,7 @@ class CooperativeStabilityEngine:
     """
     def __init__(self, session: Session):
         self.session = session
+        self.profile_engine = AgentImpactProfileEngine(session)
 
     def record_stability_metric(
         self,
@@ -47,6 +49,12 @@ class CooperativeStabilityEngine:
 
         self.session.add(metric)
         self.session.commit()
+
+        self.profile_engine.update_stability_coefficient(
+            agent_id=agent_id,
+            stability_coefficient=stability_coefficient,
+        )
+
         return metric
 
     def _compute_stability_coefficient(

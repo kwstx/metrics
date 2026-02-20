@@ -2,6 +2,7 @@ from typing import Dict, Any, List, Optional, Set
 from sqlalchemy.orm import Session
 from models.impact_graph import ImpactNode, ImpactEdge
 from models.impact_projection import ImpactProjection, AgentReliability, DomainMultiplier
+from .agent_impact_profile_engine import AgentImpactProfileEngine
 from .graph_manager import GraphManager
 from .temporal_impact_memory_engine import TemporalImpactMemoryEngine
 import networkx as nx
@@ -16,6 +17,7 @@ class ImpactForecastEngine:
         self.session = session
         self.graph_manager = GraphManager(session)
         self.temporal_memory_engine = TemporalImpactMemoryEngine(session)
+        self.profile_engine = AgentImpactProfileEngine(session)
 
     def forecast_action(
         self,
@@ -83,6 +85,14 @@ class ImpactForecastEngine:
             projection.uncertainty_bounds = self._calculate_uncertainty(accumulated, base_uncertainty, reliability)
             projection.confidence_interval = projection.uncertainty_bounds
             self.session.commit()
+
+        if agent_id:
+            self.profile_engine.update_long_term_impact_weight(
+                agent_id=agent_id,
+                impact_vector=projection.predicted_impact_vector,
+                time_horizon=time_horizon,
+                decay_rate=decay_rate,
+            )
 
         return projection
 

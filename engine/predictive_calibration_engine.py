@@ -8,6 +8,7 @@ from models.impact_projection import (
     AgentReliability, SynergyDensityMetric
 )
 from models.impact_graph import ImpactNode
+from .agent_impact_profile_engine import AgentImpactProfileEngine
 
 class PredictiveCalibrationEngine:
     """
@@ -17,6 +18,7 @@ class PredictiveCalibrationEngine:
     """
     def __init__(self, session: Session):
         self.session = session
+        self.profile_engine = AgentImpactProfileEngine(session)
 
     def record_outcome(
         self, 
@@ -154,5 +156,14 @@ class PredictiveCalibrationEngine:
         )
         self.session.add(calibration)
         self.session.commit()
+
+        if agent_id:
+            self.profile_engine.update_predictive_accuracy_index(
+                agent_id=agent_id,
+                magnitude_deviation=magnitude_deviation,
+                timing_deviation=timing_deviation,
+                synergy_assumption_error=synergy_error,
+                reliability_coefficient=new_coeff,
+            )
 
         return calibration

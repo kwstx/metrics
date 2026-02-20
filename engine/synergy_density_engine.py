@@ -1,6 +1,8 @@
 from typing import List, Dict, Set, Any
 from sqlalchemy.orm import Session
 from models.impact_projection import SynergyDensityMetric
+from models.impact_graph import ImpactNode
+from .agent_impact_profile_engine import AgentImpactProfileEngine
 from .impact_forecast_engine import ImpactForecastEngine
 
 class SynergyDensityEngine:
@@ -11,6 +13,7 @@ class SynergyDensityEngine:
     def __init__(self, session: Session):
         self.session = session
         self.forecast_engine = ImpactForecastEngine(session)
+        self.profile_engine = AgentImpactProfileEngine(session)
 
     def calculate_synergy_density(self, agent_node_ids: List[str]) -> SynergyDensityMetric:
         """
@@ -58,8 +61,25 @@ class SynergyDensityEngine:
         
         self.session.add(metric)
         self.session.commit()
+
+        self.profile_engine.update_synergy_amplification_contribution(
+            agent_ids=self._resolve_agent_ids(agent_node_ids),
+            synergy_density_ratio=ratio,
+        )
         
         return metric
+
+    def _resolve_agent_ids(self, node_ids: List[str]) -> Set[str]:
+        agent_ids: Set[str] = set()
+        for node_id in node_ids:
+            node = self.session.get(ImpactNode, node_id)
+            if not node:
+                continue
+            context = node.domain_context or {}
+            agent_id = context.get("agent_id") or context.get("agent")
+            if agent_id:
+                agent_ids.add(agent_id)
+        return agent_ids
 
     def _sum_vectors(self, vectors: List[Dict[str, float]]) -> Dict[str, float]:
         result = {}
